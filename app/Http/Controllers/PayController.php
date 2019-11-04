@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\PayModel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
-
+use Illuminate\Support\Facades\DB;
 class PayController extends Controller
 {
     /**
@@ -134,4 +134,32 @@ class PayController extends Controller
         ],200);
     }
 
+    public function PayList (){
+        $pay = DB::table('pay')
+            ->join('users', 'users.id', '=', 'pay.username')
+            ->join('course', 'course.id', '=', 'pay.course_id')
+            ->select('pay.*', 'users.name', 'course.course_name')
+            ->where('pay.pay_status',null)
+            ->orderBy('pay.created_at', 'asc')
+            ->get();
+            return response()->json([
+                "message" => "success",
+                "data" => $pay
+            ],200);
+    }
+    public function PayListConfirm (){
+        $pay = DB::table('pay')
+            ->join('users', 'users.id', '=', 'pay.username')
+            ->join('course', 'course.id', '=', 'pay.course_id')
+            ->select('pay.*', 'users.name', 'course.course_name')
+            ->where('pay.pay_status',1)
+            ->orderBy('pay.created_at', 'asc')
+            ->get();
+            return response()->json([
+                "message" => "success",
+                "data" => $pay
+            ],200);
+    }
+
+   
 }

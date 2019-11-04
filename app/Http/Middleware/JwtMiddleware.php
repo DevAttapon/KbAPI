@@ -25,6 +25,7 @@ class JwtMiddleware
                     return response()->json(['status' => 'Token is Invalid']);
                 }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
                     return response()->json(['status' => 'Token is Expired']);
+                   // return abort(401, 'Token is Expired.');
                 }else{  
                     return abort(401, 'Unauthorized.');
                 }

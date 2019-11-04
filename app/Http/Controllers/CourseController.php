@@ -138,4 +138,36 @@ class CourseController extends Controller
         ],200);
             
     }
+    public function courseRecommend()
+    {
+        $Course=CourseModel::orderBy('id', 'DESC')->skip(0)->take(10)->get();
+        return response()->json([ 
+            'message' => 'data',$Course
+        ],200);
+    }
+
+    public function coursePopular()
+    {
+        $Course = DB::table('pay')->get()->count();
+        if($Course >= 2){
+            $Course = DB::table('pay')
+                 ->select('course_id', DB::raw('count(*) as total'))
+                 ->groupBy('course_id')
+                 ->orderBy('total', 'DESC')
+                 ->get();
+                 $arr=[];
+                 $arr_order=[];
+                 foreach($Course as $c){
+                    array_push($arr,$c->course_id);
+                 }
+                 $arr_order = implode(',', $arr);
+                 $Course= CourseModel::whereIn('id',$arr)->orderByRaw(DB::raw("FIELD(id, $arr_order)"))->get();
+    
+        }else{
+            $Course=CourseModel::orderBy('id', 'ASC')->skip(0)->take(10)->get();
+        }
+       
+           return response()->json(["data" => $Course],200);   
+    }
+    
 }

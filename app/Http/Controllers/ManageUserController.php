@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\DB;
+use Auth;
+use Hash;
 
 class ManageUserController extends Controller
 {
@@ -92,5 +94,17 @@ class ManageUserController extends Controller
             'message' => 'Delete success'
         ]);
     }
+    public function changePassword(Request $request){
+        
+        $user = User::find(Auth::id());
 
+        if (!Hash::check($request->current, $user->password)) {
+            return response()->json(['errors' => ['current'=> ['Current password does not match']]], 200);
+        }
+
+        $user->password = $request->password;
+        $user->save();
+
+        return $user;
+    }
 }

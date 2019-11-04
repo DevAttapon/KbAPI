@@ -28,6 +28,7 @@ class UserController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'user' => Auth::user()->name,
+            'status' => Auth::user()->user_status,
             'id' =>Auth::user()->id
         ]);
     }

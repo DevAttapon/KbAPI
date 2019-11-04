@@ -10,7 +10,7 @@ use App\Http\Requests\ChangePasswordRequest;
 
 class ChangePasswordController extends Controller
 {
-    public function process(ChangePasswordRequest $request)
+    public function process(Request $request)
     {
         return $this->getPasswordResetTableRow($request)? $this->changePassword($request) : $this->tokenNotFoundResponse();
     }
